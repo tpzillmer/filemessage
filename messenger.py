@@ -59,13 +59,13 @@ def recvMessage(sock):
     print(msg.decode(), end='')
         
 def sendFile(sock):
-    fileName = 0
-    while(not fileName):
-        fileName = sock.recv(1024)
+    fileName = sock.recv(1024)
     f = open(fileName, 'rb')
     l = f.read()
+    f.close()
     print("Sending...")
     sock.sendall(l)
+    sock.shutdown(socket.SHUT_WR)
     print("Done sending")
 
 def recvFile(sock):
@@ -77,6 +77,7 @@ def recvFile(sock):
         print("Writing..")
         f.write(l)
         l = sock.recv(1024)
+    f.close()
     print("Done writing")
 
 if __name__ == "__main__":
